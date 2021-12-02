@@ -3,12 +3,14 @@ const router = express.Router();
 router.use(express.json());
 
 const company = require("../Model/company");
+const product = require("../Model/product");
 
 router.get("/compnayOfProduct", async (req,res)=>{
-    const cId = req.body.company_id;
-    const details = await company.findOne({company_id:cId});
+    const name = req.body.name;
+    const details = await company.findOne({name:name});
     if(details){
-        return res.json({data:details});
+        const pDetail = await product.findOne({product_id:details["product_id"]});
+        return res.json({data:pDetail});
     }
     return res.json({data:"No Data Found"});
 });

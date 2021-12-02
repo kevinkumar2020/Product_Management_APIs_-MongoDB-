@@ -3,21 +3,30 @@ const router = express.Router();
 router.use(express.json());
 
 const product = require("../Model/product");
+const company = require("../Model/company");
+const seller = require("../Model/seller");
+
+router.get("/allproduct", async (req,res)=>{
+        const details = await product.find();
+        return res.json({data:details});
+});
 
 router.get("/productOfCompnay", async (req,res)=>{
-    const cId = req.body.company_id;
-    if(cId){
-        const details = await product.findOne({company_id:cId});
-        return res.json({data:details});
+    const t = req.body.title;
+    if(t){
+        const details = await product.findOne({title:t});
+        const cDetail = await company.find({},{company_id:details["company_id"]});
+        return res.json({data:cDetail});
     }
     return res.json({data:"No Data Found"});
 });
 
 router.get("/productOfSeller", async (req,res)=>{
-    const sId = req.body.seller_id;
-    if(sId){
-        const details = await product.findOne({seller_id:sId});
-        return res.json({data:details});
+    const t = req.body.title;
+    if(t){
+        const details = await product.findOne({title:t});
+        const sDetail = await company.find({},{seller_id:details["seller_id"]});
+        return res.json({data:sDetail});
     }
     return res.json({data:"No Data Found"});
 });

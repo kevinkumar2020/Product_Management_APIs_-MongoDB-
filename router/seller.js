@@ -3,12 +3,14 @@ const router = express.Router();
 router.use(express.json());
 
 const seller = require("../Model/seller");
+const product = require("../Model/product");
 
 router.get("/sellerOfProduct", async (req,res)=>{
-    const pId = req.body.product_id;
-    const details = await seller.findOne({product_id:pId});
+    const name = req.body.name;
+    const details = await seller.findOne({name:name});
     if(details){
-        return res.json({data:details});
+        const pDetail = await product.findOne({product_id:details["product_id"]});
+        return res.json({data:pDetail});
     }
     return res.json({data:"No Data Found"});
 });
